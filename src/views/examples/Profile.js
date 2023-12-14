@@ -16,53 +16,80 @@ import DemoNavbar from "components/Navbars/DemoNavbar.js";
 import SimpleFooter from "components/Footers/SimpleFooter.js";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
-import { api } from "components/api/api";
-import { config } from "components/api/api";
+import { api, byId } from "components/api/api";
 import { Link } from "react-router-dom";
 import { Icon } from "@iconify/react";
-import { byId } from "components/api/api";
 
 const Profile = () => {
-  useEffect(() => {
-    document.documentElement.scrollTop = 0;
-    document.scrollingElement.scrollTop = 0;
-    // eslint-disable-next-line
-    // Bu satır eslint tarafından önerilen bir kontrol, bu durumda kullanmak istediğimiz özellikten dolayı es geçiyoruz
-    // this.refs.main.scrollTop = 0;
-
-    getMe();
-    getCategory();
-    getItems();
-  }, []);
-
-  const [items, setitems] = useState([]);
+  const [items, setItems] = useState([]);
   const [category, setCategory] = useState([]);
   const [getMe1, setGetMe] = useState([]);
-  const [lost, setlost] = useState([]);
+  const [itemId, setItemId] = useState([]);
+
   const [EditModal, setEditModal] = useState(false);
   const [DeleteModal, setDeleteModal] = useState(false);
 
   const openEditModal = () => setEditModal(!EditModal);
   const openDeleteModal = () => setDeleteModal(!DeleteModal);
 
-  const editLostItem = () => {
+  useEffect(() => {
+    document.documentElement.scrollTop = 0;
+    document.scrollingElement.scrollTop = 0;
+
+    getMe();
+    getCategory();
+    getItems();
+  }, []);
+
+  // getMe
+  function getMe() {
+    axios.get(api + "current-user/", {
+      headers: { Authorization: sessionStorage.getItem("jwtToken") },
+    })
+      .then((res) => {
+        setGetMe(res.data);
+      })
+      .catch(() => console.log("getMe kelmadi"));
+  }
+
+  // getCategory
+  const getCategory = () => {
+    axios.get(api + "category/", {
+      headers: { Authorization: sessionStorage.getItem("jwtToken") },
+    })
+      .then((res) => setCategory(res.data))
+      .catch(() => console.log("category kelmadi!!!"));
+  };
+
+  // getItems
+  function getItems() {
+    axios.get(api + "items/", {
+      headers: { Authorization: sessionStorage.getItem("jwtToken") },
+    })
+      .then((res) => {
+        setItems(res.data.reverse());
+      })
+      .catch(() => console.log("items kelmadi"));
+  }
+
+  // editItem
+  const editItemdata = () => {
     const editData = new FormData();
     editData.append("image", byId("file").files[0]);
     editData.append("name", byId("name").value);
     editData.append("description", byId("description").value);
     editData.append("contact_info", byId("contact_info").value);
-    editData.append("type", "LOST");
+    editData.append("type", itemId.type);
     editData.append("latitude", 0);
     editData.append("longitude", 0);
     editData.append("category ", byId("category").value);
-    editData.append("id", items.id);
+    editData.append("id", itemId.id);
 
-    axios
-      .put(api + "item" + items.id + "/", editData, {
-        headers: {
-          Authorization: sessionStorage.getItem("jwtToken"),
-        },
-      })
+    axios.put(api + "item" + itemId.id + "/", editData, {
+      headers: {
+        Authorization: sessionStorage.getItem("jwtToken"),
+      },
+    })
       .then(() => {
         openEditModal();
         getItems();
@@ -73,24 +100,13 @@ const Profile = () => {
       });
   };
 
-  // getCategory
-  const getCategory = () => {
-    let config = {
-      headers: { Authorization: sessionStorage.getItem("jwtToken") },
-    };
-    axios
-      .get(api + "category/", config)
-      .then((res) => setCategory(res.data))
-      .catch(() => console.log("category kelmadi!!!"));
-  };
-
-  const deleteLostItem = () => {
-    axios
-      .delete(api + "item" + items.id + "/", {
-        headers: {
-          Authorization: sessionStorage.getItem("jwtToken"),
-        },
-      })
+  // deleteItem
+  const deleteItemData = () => {
+    axios.delete(api + "item" + itemId.id + "/", {
+      headers: {
+        Authorization: sessionStorage.getItem("jwtToken"),
+      },
+    })
       .then(() => {
         toast.success("Item o'chirildi!!!");
         openDeleteModal();
@@ -99,25 +115,42 @@ const Profile = () => {
       .catch(() => toast.error("Item o'chirishda xatolik yuz berdi!!!"));
   };
 
-  function getMe() {
-    axios
-      .get(api + "current-user/", config)
-      .then((res) => {
-        setGetMe(res.data);
-      })
-      .catch((err) => console.log(err));
+  // my lost filter
+  const myLostFilter = () => {
+    axios.get(api + "items/", {
+      headers: { Authorization: sessionStorage.getItem("jwtToken") }
+    })
+      .then(res => setItems(res.data.reverse().filter(i => i.type == "LOST")))
+      .catch(() => console.log("my items kelamdi!!!"))
   }
 
-  function getItems() {
-    axios
-      .get(api + "items/", {
-        headers: { Authorization: sessionStorage.getItem("jwtToken") },
-      })
-      .then((res) => {
-        setitems(res.data);
-      })
-      .catch((err) => console.log(err));
+  // my found filter
+  const myFoundFilter = () => {
+    axios.get(api + "items/", {
+      headers: { Authorization: sessionStorage.getItem("jwtToken") }
+    })
+      .then(res => setItems(res.data.reverse().filter(i => i.type == "FOUND")))
+      .catch(() => console.log("my items kelamdi!!!"))
   }
+
+  // category filter
+  const categoryFIlter = () => {
+    let categoryId = byId("categoryFilter").value
+    axios.get(api + "items/", {
+      headers: { Authorization: sessionStorage.getItem("jwtToken") }
+    })
+      .then(res => setItems(res.data.reverse().filter(c => c.category == categoryId)))
+      .catch(() => console.log("category filter ishlamadi!!!"))
+  }
+
+  // search
+  // const searchItems = () => {
+  //   let searchItem = byId("searchProfile").value
+  //   if (!!searchItem) axios.get(api + "items/?search=" + searchItem, {
+  //     headers: { Authorization: sessionStorage.getItem("jwtToken") }
+  //   }).then(res => setItems(res.data.reverse()))
+  //   else getItems();
+  // }
 
   const goAbout = () => byId("linkLost").click();
 
@@ -128,9 +161,7 @@ const Profile = () => {
       <Link to="/lost/about" id="linkLost"></Link>
       <main className="profile-page">
         <section className="section-profile-cover section-shaped my-0">
-          {/* Circles background */}
           <div className="shape shape-style-1 shape-default alpha-4"></div>
-          {/* SVG separator */}
           <div className="separator separator-bottom separator-skew">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -210,68 +241,118 @@ const Profile = () => {
                   </div>
                 </div>
                 <div className="mt-5 py-5 border-top text-center">
+                  <Row
+                    style={{
+                      marginTop: "3rem",
+                      marginBottom: "3rem",
+                    }}>
+                    <Col
+                      md="8"
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                      }}>
+                      <Button
+                        onClick={() => {
+                          getItems();
+                          byId("categoryFilter").value = "Category filter"
+                        }}
+                        className="btn-neutral btn-icon py-1"
+                        color="default"
+                        size="sm">
+                        All
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          myLostFilter();
+                          byId("categoryFilter").value = "Category filter"
+                        }}
+                        className="btn-neutral btn-icon py-1"
+                        color="default"
+                        size="sm">
+                        Lost filters
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          myFoundFilter();
+                          byId("categoryFilter").value = "Category filter"
+                        }}
+                        className="btn-neutral btn-icon py-1"
+                        color="default"
+                        size="sm">
+                        Found filters
+                      </Button>
+                    </Col>
+                    <Col md="4">
+                      <select
+                        id="categoryFilter"
+                        onChange={categoryFIlter}
+                        className="form-control form-control-sm">
+                        <option selected disabled>Category filter</option>
+                        {category && category.map((item, i) =>
+                          <option key={i} value={item.id}>{item.name}</option>
+                        )}
+                      </select>
+                    </Col>
+                  </Row>
                   <Row className="row-grid">
-                    {items &&
-                      items.map((item, i) => (
-                        <Col lg="4" className="mb-5" key={i}>
-                          <Card className="card-lift--hover shadow border-0">
-                            <CardBody className="pb-5">
-                              <img
-                                alt="..."
-                                className="img-fluid "
-                                src={item.image}
-                                style={{
-                                  width: "100%",
-                                  height: "230px",
-                                  objectFit: "cover",
-                                }}
-                              />
-                              <h6 className="text-primary mt-4 text-uppercase">
-                                {item.name}
-                              </h6>
-                              <Row>
-                                <Col className="col-8">
-                                  <Button
-                                    onClick={() => {
-                                      goAbout();
-                                      sessionStorage.setItem(
-                                        "lostAbout",
-                                        item.id
-                                      );
-                                    }}
-                                    className="mt-4"
-                                    color="primary"
-                                  >
-                                    Learn more
-                                  </Button>
-                                </Col>
-                                {/* <Col style={{ marginTop: "2rem" }}>
-                                  <Link
-                                    className="mr-3"
-                                    onClick={() => {
-                                      openEditModal();
-                                      setitems(item);
-                                    }}
-                                  >
-                                    <Icon icon="uiw:edit" width="23" />
-                                  </Link>
-                                  <Link
-                                    onClick={() => {
-                                      openDeleteModal();
-                                      setitems(item);
-                                    }}
-                                  >
-                                    <Icon
-                                      icon="ic:baseline-delete"
-                                      width="25"
-                                    />
-                                  </Link>
-                                </Col> */}
-                              </Row>
-                            </CardBody>
-                          </Card>
-                        </Col>
-                      ))}
+                    {items && items.map((item, i) => (
+                      <Col lg="4" className="mb-5" key={i}>
+                        <Card className="card-lift--hover shadow border-0">
+                          <CardBody className="pb-5">
+                            <img
+                              alt="..."
+                              className="img-fluid "
+                              src={item.image}
+                              style={{
+                                width: "100%",
+                                height: "230px",
+                                objectFit: "cover",
+                              }}
+                            />
+                            <h6 className="text-primary mt-4 text-uppercase">
+                              {item.name}
+                            </h6>
+                            <Row>
+                              <Col className="col-8 pl-0">
+                                <Button
+                                  onClick={() => {
+                                    goAbout();
+                                    sessionStorage.setItem("lostAbout", item.id);
+                                  }}
+                                  className="mt-4"
+                                  color="primary"
+                                >
+                                  Learn more
+                                </Button>
+                              </Col>
+                              <Col style={{ marginTop: "2rem" }}>
+                                <Link
+                                  className="mr-3"
+                                  onClick={() => {
+                                    openEditModal();
+                                    setItemId(item);
+                                  }}
+                                >
+                                  <Icon icon="uiw:edit" width="23" />
+                                </Link>
+                                <Link
+                                  onClick={() => {
+                                    openDeleteModal();
+                                    setItemId(item);
+                                  }}
+                                >
+                                  <Icon
+                                    icon="ic:baseline-delete"
+                                    width="25"
+                                  />
+                                </Link>
+                              </Col>
+                            </Row>
+                          </CardBody>
+                        </Card>
+                      </Col>
+                    ))}
                   </Row>
                 </div>
               </div>
@@ -283,9 +364,8 @@ const Profile = () => {
       <Modal isOpen={EditModal} centered size="lg">
         <ModalHeader
           toggle={openEditModal}
-          className="text-dark fs-4 fw-bolder"
-        >
-          Edit Lost
+          className="text-dark fs-4 fw-bolder">
+          Edit item
         </ModalHeader>
         <ModalBody className="techer__modal-body">
           <Input type="file" className="form-control mb-3" id="file" />
@@ -293,45 +373,35 @@ const Profile = () => {
             id="name"
             className="mb-3"
             placeholder="Name"
-            defaultValue={items && items.name}
-          />
+            defaultValue={itemId && itemId.name} />
           <Input
             id="contact_info"
             className="mb-3"
             placeholder="Contact info"
-            defaultValue={items && items.contact_info}
-          />
+            defaultValue={itemId && itemId.contact_info} />
           <textarea
             id="description"
             className="form-control"
             placeholder="Description"
-            defaultValue={items && items.description}
-          />
+            defaultValue={itemId && itemId.description} />
           <select class="form-control mt-3" id="category">
-            <option selected disabled>
-              Category
-            </option>
-            {category &&
-              category.map((item, i) => (
-                <option key={i} value={item.id}>
-                  {item.name}
-                </option>
-              ))}
+            <option selected disabled>Category</option>
+            {category && category.map((item, i) =>
+              <option key={i} value={item.id}>{item.name}</option>
+            )}
           </select>
         </ModalBody>
         <ModalFooter>
           <Button
             boxShadow="rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px"
             className="bg-danger"
-            onClick={openEditModal}
-          >
+            onClick={openEditModal}>
             Close
           </Button>
           <Button
             className="bg-success"
             boxShadow="rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px"
-            onClick={editLostItem}
-          >
+            onClick={editItemdata}>
             Save
           </Button>
         </ModalFooter>
@@ -341,26 +411,23 @@ const Profile = () => {
       <Modal isOpen={DeleteModal} centered size="lg">
         <ModalHeader
           toggle={openDeleteModal}
-          className="text-dark fs-4 fw-bolder"
-        >
+          className="text-dark fs-4 fw-bolder">
           Delete item
         </ModalHeader>
         <ModalBody className="techer__modal-body">
-          {items.name} ni o'chirishga ishonchingiz komilmi?
+          {itemId.name} ni o'chirishga ishonchingiz komilmi?
         </ModalBody>
         <ModalFooter>
           <Button
             boxShadow="rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px"
             className="bg-danger"
-            onClick={openDeleteModal}
-          >
+            onClick={openDeleteModal}>
             Close
           </Button>
           <Button
             className="bg-success"
             boxShadow="rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px"
-            onClick={deleteLostItem}
-          >
+            onClick={deleteItemData}>
             Yes
           </Button>
         </ModalFooter>

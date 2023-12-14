@@ -68,7 +68,7 @@ const Loginga = () => {
                 </span>
               </Button>
               <UncontrolledTooltip delay={0} target="tooltip475038074">
-                Telegram 
+                Telegram
               </UncontrolledTooltip>
               {/* <Button
                 className="btn-icon-only rounded-circle ml-1"
@@ -126,33 +126,35 @@ const Loginga = () => {
               </div>
             </Col>
             <Col md="6">
-              <Nav className="nav-footer justify-content-end">
+              <Nav className="nav-footer justify-content-lg-end">
                 <NavItem>
-                  <NavLink
-                    href="https://itca.uz/"
-                    target="_blank">
-                    It City Academy
+                  <NavLink className="pl-0">
+                    <Link
+                      to="https://itca.uz/"
+                      target="_blank">
+                      It City Academy
+                    </Link>
                   </NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink
-                    href=""
-                    target="_blank">
-                    About Us
+                  <NavLink>
+                    <Link to="/register-page">
+                      Lost
+                    </Link>
                   </NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink
-                    href=""
-                    target="_blank">
-                    Blog
+                  <NavLink>
+                    <Link to="/register-page">
+                      Found
+                    </Link>
                   </NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink
-                    href=""
-                    target="_blank">
-                    Profile
+                  <NavLink>
+                    <Link to="/register-page">
+                      Profile
+                    </Link>
                   </NavLink>
                 </NavItem>
               </Nav>

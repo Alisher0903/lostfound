@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import {
   Button,
   NavItem,
@@ -80,9 +81,9 @@ const SimpleFooter = () => {
             </Col>
           </Row>
           <hr />
-          <Row className=" align-items-center justify-content-md-between">
+          <Row className="align-items-center justify-content-md-between">
             <Col md="6">
-              <div className=" copyright">
+              <div className="copyright">
                 © {new Date().getFullYear()}{" "}
                 <a
                   href="https://itca.uz/"
@@ -93,33 +94,35 @@ const SimpleFooter = () => {
               </div>
             </Col>
             <Col md="6">
-              <Nav className=" nav-footer justify-content-end">
+              <Nav className="nav-footer justify-content-lg-end">
                 <NavItem>
-                  <NavLink
-                    href="https://itca.uz/"
-                    target="_blank">
-                    It City Academy
+                  <NavLink className="pl-0">
+                    <Link
+                      to="https://itca.uz/"
+                      target="_blank">
+                      It City Academy
+                    </Link>
                   </NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink
-                    href=""
-                    target="_blank">
-                    About Us
+                  <NavLink>
+                    <Link to="/lost">
+                      Lost
+                    </Link>
                   </NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink
-                    href=""
-                    target="_blank">
-                    Blog
+                  <NavLink>
+                    <Link to="/found">
+                      Found
+                    </Link>
                   </NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink
-                    href=""
-                    target="_blank">
-                    Profile
+                  <NavLink>
+                    <Link to="/profile">
+                      Profile
+                    </Link>
                   </NavLink>
                 </NavItem>
               </Nav>

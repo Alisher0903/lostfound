@@ -14,48 +14,30 @@ const Hero2 = () => {
           <div className="shape shape-style-1 shape-default">
             <span className="span-150" />
             <span className="span-50" />
-            {/* Boshqa spans... */}
           </div>
           <Container className="shape-container d-flex align-items-center py-lg">
             <div className="col px-0">
               <Row className="align-items-center justify-content-center g-5">
-                <Col className="text-center" lg="6">
+                <Col className="text-center pr-lg-4" lg="6">
                   <img
+                    style={{
+                      boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+                      transform: "skewY(5deg)",
+                    }}
                     alt="..."
                     className="img-fluid"
-                    src={require("assets/img/theme/landing.jpg")}
+                    src={require("assets/img/brand/glavni.webp")}
                   />
-
-                  {/* <div className="btn-wrapper ">
-                    <Button
-                      className="btn-white btn-icon mb-3 mb-sm-0"
-                      color="default"
-                      href="https://www.creative-tim.com/product/argon-design-system-react?ref=adsr-landing-page"
-                      size="lg"
-                    >
-
-                      <span className="btn-inner--icon mr-1">
-                        <i className="ni ni-cloud-download-95" />
-                      </span>
-                      <span className="btn-inner--text">Download React</span>
-                    </Button>{" "}
-                    {/* Boshqa Button... */}
-                  {/* </div>
-                  <div className="mt-5">
-                    <small className="text-white font-weight-bold mb-0 mr-2">
-                      *proudly coded by
-                    </small>
-                    <img
-                      alt="..."
-                      className="ml-1"
-                      style={{ height: "28px" }}
-                      src={require("assets/img/brand/creativetim-white-slim.png")}
-                    />
-                  </div> */}
                 </Col>
-                <Col className="text-center px-5" lg="6">
+                <Col className="text-center pl-lg-4" lg="6">
                   <p className="lead text-white">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis corporis fugit deleniti? Excepturi quaerat dolor quas dolores nulla dolorum voluptas, eius, magnam impedit obcaecati nisi, doloribus non accusantium eaque quia.
+                    ReturnMe, o'zini dunyodagi eng yirik global qaytarish kompaniyasi deb ataydi va u
+                    turli ko'chma buyumlarni aniqlash va himoya qilish uchun qaytarish teglaridan foydalanadi.
+                    Bu buyumlar orasida mobil telefonlar, noutbuklar, kalitlar, yuk sumkalari va uy hayvonlari
+                    mavjud. Ularning ma'lumotlariga ko'ra, ReturnMe tomonidan himoyalangan buyumlarining 80% dan
+                    ortig'i egalariga qaytarilgan. Ular sayt orqali turli qiymatli buyumlarni teglash va himoya
+                    qilish uchun mahsulotlarni taklif etishadi, shuningdek teglarni faollashtirish, topilgan va
+                    yo'qolgan buyumlar haqida xabar berish bo'yicha ko'rsatmalar mavjud.
                   </p>
                 </Col>
               </Row>
@@ -68,8 +50,7 @@ const Hero2 = () => {
               version="1.1"
               viewBox="0 0 2560 100"
               x="0"
-              y="0"
-            >
+              y="0">
               <polygon className="fill-white" points="2560 0 2560 100 0 100" />
             </svg>
           </div>

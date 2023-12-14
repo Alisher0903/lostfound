@@ -50,7 +50,7 @@ const Lost = () => {
     }
     axios.get(api + "item/", config)
       .then(res => {
-        setLost(res.data.filter(t => t.type == "LOST"))
+        setLost(res.data.reverse().filter(t => t.type == "LOST"))
       })
       .catch(() => console.log("Lost kelmadi!!!"))
   }
@@ -138,7 +138,9 @@ const Lost = () => {
   // search
   const searchLost = () => {
     let searchItem = byId("search").value
-    if (!!searchItem) axios.get(api + "item/?search=" + searchItem).then(res => setLost(res.data.filter(t => t.type == "LOST")))
+    if (!!searchItem) axios.get(api + "item/?search=" + searchItem, {
+      headers: { Authorization: sessionStorage.getItem("jwtToken") }
+    }).then(res => setLost(res.data.reverse().filter(t => t.type == "LOST")))
     else getLost();
   }
 
@@ -148,7 +150,7 @@ const Lost = () => {
     axios.get(api + "item/category/" + categoryId + "/", {
       headers: { Authorization: sessionStorage.getItem("jwtToken") }
     })
-      .then(res => setLost(res.data.filter(c => c.type == "LOST")))
+      .then(res => setLost(res.data.reverse().filter(c => c.type == "LOST")))
       .catch(() => console.log("category filter ishlamadi!!!"))
   }
 
@@ -157,7 +159,7 @@ const Lost = () => {
     axios.get(api + "items/", {
       headers: { Authorization: sessionStorage.getItem("jwtToken") }
     })
-      .then(res => setLost(res.data.filter(i => i.type == "LOST")))
+      .then(res => setLost(res.data.reverse().filter(i => i.type == "LOST")))
       .catch(() => console.log("my items kelamdi!!!"))
   }
 

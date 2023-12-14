@@ -42,7 +42,6 @@ const CardsFooter = () => {
                 </Link>
               </Card>
               <h2 className=" text-success text-center font-weight-bold mt-3">FOUND</h2>
-
             </Col>
           </Row>
         </Container>
@@ -68,7 +67,7 @@ const CardsFooter = () => {
                 </span>
               </Button>
               <UncontrolledTooltip delay={0} target="tooltip475038074">
-                Telegram 
+                Telegram
               </UncontrolledTooltip>
               {/* <Button
                 className="btn-icon-only rounded-circle ml-1"
@@ -126,33 +125,35 @@ const CardsFooter = () => {
               </div>
             </Col>
             <Col md="6">
-              <Nav className="nav-footer justify-content-end">
+              <Nav className="nav-footer justify-content-lg-end">
                 <NavItem>
-                  <NavLink
-                    href="https://itca.uz/"
-                    target="_blank">
-                    It City Academy
+                  <NavLink className="pl-0">
+                    <Link
+                      to="https://itca.uz/"
+                      target="_blank">
+                      It City Academy
+                    </Link>
                   </NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink
-                    href=""
-                    target="_blank">
-                    About Us
+                  <NavLink>
+                    <Link to="/lost">
+                      Lost
+                    </Link>
                   </NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink
-                    href=""
-                    target="_blank">
-                    Blog
+                  <NavLink>
+                    <Link to="/found">
+                      Found
+                    </Link>
                   </NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink
-                    href=""
-                    target="_blank">
-                    Profile
+                  <NavLink>
+                    <Link to="/profile">
+                      Profile
+                    </Link>
                   </NavLink>
                 </NavItem>
               </Nav>
