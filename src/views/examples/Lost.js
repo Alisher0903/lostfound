@@ -303,7 +303,7 @@ const Lost = () => {
                               </Button>
                             </Col>
                             <Col style={{ marginTop: "2rem" }}>
-                              <Link className="mr-3" onClick={() => {
+                              {/* <Link className="mr-3" onClick={() => {
                                 openEditModal();
                                 setLostId(item);
                               }}>
@@ -314,7 +314,7 @@ const Lost = () => {
                                 setLostId(item)
                               }}>
                                 <Icon icon="ic:baseline-delete" width="25" />
-                              </Link>
+                              </Link> */}
                             </Col>
                           </Row>
                         </CardBody>

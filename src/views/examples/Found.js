@@ -47,7 +47,7 @@ const Found = () => {
         Authorization: sessionStorage.getItem("jwtToken"),
       },
     })
-      .then(res => setFound(res.data.filter(t => t.type == "FOUND")))
+      .then(res => setFound(res.data.reverse().filter(t => t.type == "FOUND")))
       .catch(() => console.log("Found kelmadi!!!"))
   }
 
@@ -131,7 +131,7 @@ const Found = () => {
   // search
   const searchFound = () => {
     let searchItem = byId("search").value
-    if (!!searchItem) axios.get(api + "item/?search=" + searchItem).then(res => setFound(res.data.filter(t => t.type == "FOUND")))
+    if (!!searchItem) axios.get(api + "item/?search=" + searchItem).then(res => setFound(res.data.reverse().filter(t => t.type == "FOUND")))
     else getFound();
   }
 
@@ -141,16 +141,16 @@ const Found = () => {
     axios.get(api + "item/category/" + categoryId + "/", {
       headers: { Authorization: sessionStorage.getItem("jwtToken") }
     })
-      .then(res => setFound(res.data.filter(c => c.type == "FOUND")))
+      .then(res => setFound(res.data.reverse().filter(c => c.type == "FOUND")))
       .catch(() => console.log("category filter ishlamadi!!!"))
   }
 
-  // my lost filter
+  // my found filter
   const myFoundFilter = () => {
     axios.get(api + "items/", {
       headers: { Authorization: sessionStorage.getItem("jwtToken") }
     })
-      .then(res => setFound(res.data.filter(i => i.type == "FOUND")))
+      .then(res => setFound(res.data.reverse().filter(i => i.type == "FOUND")))
       .catch(() => console.log("my items kelamdi!!!"))
   }
 
@@ -296,7 +296,7 @@ const Found = () => {
                               </Button>
                             </Col>
                             <Col style={{ marginTop: "2rem" }}>
-                              <Link className="mr-3" onClick={() => {
+                              {/* <Link className="mr-3" onClick={() => {
                                 openEditModal();
                                 setFoundId(item);
                               }}>
@@ -307,7 +307,7 @@ const Found = () => {
                                 setFoundId(item);
                               }}>
                                 <Icon icon="ic:baseline-delete" width="25" />
-                              </Link>
+                              </Link> */}
                             </Col>
                           </Row>
                         </CardBody>
